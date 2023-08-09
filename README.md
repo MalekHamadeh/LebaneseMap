@@ -69,3 +69,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 # LebaneseMap
+
+This project used the following libararies: 
+React-simple-maps for the display of the lebanese map, districts and villages from GeoJSON files that i got from the following Repo -> https://github.com/EbrahimKaram/Lebanon-Districts-D3-Map @EbrahimKaram
+Material Ui for the display of Card and BreadCrumbs
