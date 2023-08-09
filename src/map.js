@@ -7,11 +7,6 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useTransformEffect,
-} from "react-zoom-pan-pinch";
 
 const colors = [
   "#EF4907",
@@ -35,12 +30,6 @@ const MapComponent = () => {
     center: [35.85, 33.85],
   });
 
-  const initialX = 0; // Initial X position
-  const initialY = 0; // Initial Y position
-  const initialScale = 1; // Initial scale
-  const minScale = 0.5; // Minimum scale
-  const maxScale = 10; // Maximum scale
-
   const handleLevelOneClick = (geo) => {
     setSelectedLevel(geo);
     const levelId = geo.properties.GID_1;
@@ -49,7 +38,6 @@ const MapComponent = () => {
     );
     setProvincesInLevelOne(ProvinceId);
     setSelectedProvince(null);
-    console.log("hi");
   };
 
   const handleProvinceClick = (geo) => {
