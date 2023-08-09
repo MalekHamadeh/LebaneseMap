@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import levelOne from "./GeoJson/Lebanon_Level1.json";
 import provincesData from "./GeoJson/Lebanon_Level2.json";
@@ -7,6 +7,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import { geoPath, geoBounds } from "d3-geo";
 
 const colors = [
   "#EF4907",
@@ -20,11 +21,42 @@ const colors = [
 ];
 
 const MapComponent = () => {
-  const [selectedLevel, setSelectedLevel] = React.useState(null);
-  const [selectedProvince, setSelectedProvince] = React.useState(null);
-  const [ProvincesInLevelOne, setProvincesInLevelOne] = React.useState([]);
-  const [villagesInProvince, setVillagesInProvince] = React.useState([]);
-  const [selectedVillage, setSelectedVillage] = React.useState(null);
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedProvince, setSelectedProvince] = useState(null);
+  const [ProvincesInLevelOne, setProvincesInLevelOne] = useState([]);
+  const [villagesInProvince, setVillagesInProvince] = useState([]);
+  const [selectedVillage, setSelectedVillage] = useState(null);
+  const [projectionConfig, setProjectionConfig] = useState({
+    scale: 19000,
+    center: [35.8, 33.8],
+  });
+
+  const resetProjection = () => {
+    setProjectionConfig({
+      scale: 19000,
+      center: [35.85, 33.85],
+    });
+
+    setVillagesInProvince([]);
+  };
+
+  useEffect(() => {
+    // Add event listener to detect clicks outside the map container
+    const handleDocumentClick = (e) => {
+      const mapContainer = document.getElementById("map-container");
+      if (!mapContainer.contains(e.target)) {
+        resetProjection();
+      }
+    };
+
+    // Attach the event listener
+    document.addEventListener("click", handleDocumentClick);
+
+    // Cleanup: remove the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, []);
 
   const handleLevelOneClick = (geo) => {
     setSelectedLevel(geo);
@@ -44,6 +76,23 @@ const MapComponent = () => {
     );
     setVillagesInProvince(villagesInSelectedProvince);
     setSelectedVillage(null);
+    const path = geoPath().projection(projectionConfig);
+    const bounds = geoBounds(geo.geometry);
+
+    // Calculate the width and height of the bounding box
+    const width = Math.abs(bounds[1][0] - bounds[0][0]);
+    const height = Math.abs(bounds[1][1] - bounds[0][1]);
+
+    // Calculate the center of the bounding box
+    const centerX = (bounds[0][0] + bounds[1][0]) / 2;
+    const centerY = (bounds[0][1] + bounds[1][1]) / 2;
+
+    const newProjectionConfig = {
+      scale: (1 / Math.max(width, height)) * 40000,
+      center: [centerX, centerY],
+    };
+
+    setProjectionConfig(newProjectionConfig);
   };
 
   const handleSelectedVillage = (geo) => {
@@ -57,6 +106,7 @@ const MapComponent = () => {
         justifyContent: "center",
         alignItems: "start",
         flexDirection: "row",
+        backgroundColor: "#dceefd",
       }}
     >
       <div
@@ -126,10 +176,11 @@ const MapComponent = () => {
           height: "100vh",
           width: "60vw",
         }}
+        id='map-container'
       >
         <ComposableMap
           projection='geoEqualEarth'
-          projectionConfig={{ scale: 19000, center: [35.85, 33.85] }}
+          projectionConfig={projectionConfig}
           style={{
             width: "100%",
             height: "100%",
@@ -176,14 +227,14 @@ const MapComponent = () => {
                       style={{
                         default: {
                           fill: "transparent",
-                          strokeWidth: "0.2px",
+                          strokeWidth: "0.3px",
                         },
                         hover: {
-                          fill: "white",
+                          fill: "#e0eaf3",
                           cursor: "pointer",
                         },
                         pressed: {
-                          fill: "white",
+                          fill: "#e0eaf3",
                         },
                       }}
                       stroke='white'
@@ -204,14 +255,14 @@ const MapComponent = () => {
                     style={{
                       default: {
                         fill: "transparent",
-                        strokeWidth: "0.2px",
+                        strokeWidth: "0.3px",
                       },
                       hover: {
-                        fill: "white",
+                        fill: "#e0eaf3",
                         cursor: "pointer",
                       },
                       pressed: {
-                        fill: "white",
+                        fill: "#e0eaf3",
                       },
                     }}
                     stroke='white'
