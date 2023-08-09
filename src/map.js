@@ -25,10 +25,6 @@ const MapComponent = () => {
   const [ProvincesInLevelOne, setProvincesInLevelOne] = React.useState([]);
   const [villagesInProvince, setVillagesInProvince] = React.useState([]);
   const [selectedVillage, setSelectedVillage] = React.useState(null);
-  const [projectionConfig, setProjectionConfig] = React.useState({
-    scale: 19000,
-    center: [35.85, 33.85],
-  });
 
   const handleLevelOneClick = (geo) => {
     setSelectedLevel(geo);
