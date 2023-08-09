@@ -7,7 +7,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { geoPath, geoBounds } from "d3-geo";
+import { geoBounds } from "d3-geo";
 
 const colors = [
   "#EF4907",
@@ -76,7 +76,7 @@ const MapComponent = () => {
     );
     setVillagesInProvince(villagesInSelectedProvince);
     setSelectedVillage(null);
-    const path = geoPath().projection(projectionConfig);
+
     const bounds = geoBounds(geo.geometry);
 
     // Calculate the width and height of the bounding box
