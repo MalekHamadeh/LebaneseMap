@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import levelOne from "./GeoJson/Lebanon_Level1.json";
 import provincesData from "./GeoJson/Lebanon_Level2.json";
@@ -133,7 +133,7 @@ const MapComponent = () => {
       >
         <ComposableMap
           projection='geoEqualEarth'
-          projectionConfig={projectionConfig}
+          projectionConfig={{ scale: 19000, center: [35.85, 33.85] }}
           style={{
             width: "100%",
             height: "100%",
